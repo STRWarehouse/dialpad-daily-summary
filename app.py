@@ -77,7 +77,7 @@ def main():
     local_tz = ZoneInfo(os.environ.get("TIMEZONE", "America/New_York"))
 
     end_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
-    start_ms = int((datetime.now(timezone.utc) - timedelta(days=1)).timestamp() * 1000)
+    start_ms = int((datetime.now(timezone.utc) - timedelta(hours=12)).timestamp() * 1000)
     query = urllib.parse.urlencode({"started_after": start_ms, "started_before": end_ms})
     print("1/4 Fetching recent Dialpad calls...", flush=True)
     calls = list_items(request_json("GET", f"https://dialpad.com/api/v2/call?{query}", dialpad_key))
@@ -99,7 +99,7 @@ def main():
         if index < len(selected_calls):
             time.sleep(5.2)
 
-    print("3/4 Fetching the last 24 hours of captured SMS messages...", flush=True)
+    print("3/4 Fetching the last 12 hours of captured SMS messages...", flush=True)
     sms_payload = request_json("GET", feed_url, bridge_secret)
     sms_events = list_items(sms_payload)
     source = json.dumps({"calls": call_notes, "sms_messages": sms_events[-250:]}, ensure_ascii=False)
